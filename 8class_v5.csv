@@ -1,0 +1,54 @@
+Material,Type,Dirt,Label
+PET,Botella,*,Botella
+VIDRIO,Botella,*,Botella
+PLÁSTICO,Botella,*,Botella
+PLÁSTICO,Tapa,*,Botella
+METAL,Tapa,*,Botella
+PET,Tapa,*,Botella
+ALUMINIO,Tapa,*,Botella
+PLÁSTICO,Envoltorio,FALSE,Empaques impresos
+PLÁSTICO,Bolsa,FALSE,Empaques impresos
+TETRAPACK,*,*,Empaques impresos
+PLÁSTICO,Caja,*,Empaques impresos
+MIXTO_RECICLABLE,*,FALSE,Empaques impresos
+PAPER_CUP,*,*,Envase
+PLÁSTICO,Envase,*,Envase
+MIXTO_RECICLABLE,Envase,*,Envase
+PET,Envase,*,Envase
+CARTÓN,Envase,*,Envase
+ALUMINIO,Lata,*,Lata
+PLÁSTICO,Lata,*,Lata
+MIXTO_RECICLABLE,Lata,*,Lata
+ORGÁNICO,*,*,Orgánico
+MADERA,*,*,Orgánico
+LAPICERO_MARCADOR,*,*,Otros
+BATERÍA,*,*,Otros
+EMPAQUE_MEDICAMENTO,*,*,Otros
+TAPABOCAS,*,*,Otros
+ELECTRÓNICO,*,*,Otros
+PLÁSTICO,*,*,Otros
+MIXTO_ORGÁNICO,*,*,Otros
+ALUMINIO,*,*,Otros
+NO_RECICLABLE,*,*,Otros
+CHICLE,*,*,Otros
+TELA,*,*,Otros
+BOLSA_AROMÁTICA,*,*,Otros
+CREMA_DENTAL,*,*,Otros
+ALGODÓN,*,*,Otros
+CERÁMICO,*,*,Otros
+CARNÉT,*,*,Otros
+HERRAMIENTA,*,*,Otros
+MIXTO_RECICLABLE,*,TRUE,Otros
+PAPEL,Envoltorio,*,Papel no reciclable
+PAPEL_OTROS,*,*,Papel no reciclable
+BOLSA_PAPEL,*,TRUE,Papel no reciclable
+PAPEL_TOALLA,*,*,Papel no reciclable
+PAPEL_RECIBO,*,*,Papel no reciclable
+SERVILLETA_PAPEL_MANTEQUILLA,*,*,Papel no reciclable
+PAPEL_MANTEQUILLA,Envoltorio,*,Papel no reciclable
+CARTÓN,*,TRUE,Papel no reciclable
+PAPEL,*,TRUE,Papel no reciclable
+CARTÓN,*,FALSE,Papeles
+PAPEL,Lámina,FALSE,Papeles
+PAPEL,Sobre,FALSE,Papeles
+BOLSA_PAPEL,*,FALSE,Papeles
