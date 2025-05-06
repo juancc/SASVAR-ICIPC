@@ -147,7 +147,7 @@ def pred_column_gen(df, column_ids, rules_path):
     return df, column_ids
 
 def load_filenames(repo_path):
-    filenames_path = f'{repo_path}/app_image_filenames.pickle'
+    filenames_path = f'{repo_path}/Assets/app_image_filenames.pickle'
     with open(filenames_path, 'rb') as f:
         filenames = pickle.load(f)
     return filenames
