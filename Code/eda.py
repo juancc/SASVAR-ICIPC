@@ -9,8 +9,10 @@ import random
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-def plot_random_images(base_path, n=10, img_exts={'.jpg', '.jpeg', '.png', '.bmp', '.gif'}):
-    
+import Code.globals as globals
+
+def plot_random_images(n=10, img_exts={'.jpg', '.jpeg', '.png', '.bmp', '.gif'}):
+    base_path = os.path.join(globals.REPO_PATH, 'Dataset')
     # Collect all image paths
     image_paths = []
     for root, _, files in os.walk(base_path):
