@@ -56,7 +56,7 @@ def load_labels(materials_replace=None):
         # # Remove nan from id dicts
         if np.nan in uniques: uniques.remove(np.nan)
         ids = dict(enumerate(uniques))
-        ids[-1] = globals.NAN_TAG
+        ids[-1] = gb.NAN_TAG
 
         # Reverse IDs for table replacement
         df.replace({col: {v:k for k,v in ids.items()}}, inplace=True)
