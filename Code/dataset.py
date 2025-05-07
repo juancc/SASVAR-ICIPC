@@ -4,6 +4,7 @@ Dataset related function
 JCA
 """
 import pickle
+import os
 
 import pandas
 import numpy as np
@@ -16,21 +17,21 @@ pandas.set_option('display.width', 200)  # or some large value
 pandas.set_option('display.max_columns', None)
 pandas.set_option('display.max_colwidth', None)
 
+import Code.globals as gb
 
-NAN_TAG = 'Unknown'
 
 
-def load_labels(labels_path, materials_replace=None):
+
+def load_labels(materials_replace=None):
     """Load CSV with SASVAR labels"""
     # Load labels
-    nan_tag = 'Unknown'
 
     # Target columns
     column_ids = {'Material':{}, 'Brand':{}, 'Type':{},
                   'Dirt':{}, 'Package Color':{}, 'Bottle Cap':{},
                   'ProductType':{}}
 
-    df = pandas.read_csv(labels_path, sep=',')
+    df = pandas.read_csv(gb.LABELS_PATH, sep=',')
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     df.drop(columns=['Capacity', 'Reference'],
             inplace=True, errors='ignore') # 'Nombre producto'
@@ -55,7 +56,7 @@ def load_labels(labels_path, materials_replace=None):
         # # Remove nan from id dicts
         if np.nan in uniques: uniques.remove(np.nan)
         ids = dict(enumerate(uniques))
-        ids[-1] = NAN_TAG
+        ids[-1] = globals.NAN_TAG
 
         # Reverse IDs for table replacement
         df.replace({col: {v:k for k,v in ids.items()}}, inplace=True)
@@ -100,7 +101,7 @@ def calculate_new_label(row, column_ids, rules):
     return None
 
 
-def pred_column_gen(df, column_ids, rules_path):
+def pred_column_gen(df, column_ids):
     """Generate prediction column labels based a rules table"""
 
     # Invert columns_ids
@@ -109,7 +110,7 @@ def pred_column_gen(df, column_ids, rules_path):
         inv_column_ids[col_name] = {j:i for i,j in ids.items()}
 
     # Load mapping rules
-    rules = pandas.read_csv(rules_path, sep=',')
+    rules = pandas.read_csv(gb.RULES_PATH, sep=',')
 
     # Generate Ids
     uniques = list(rules.Label.unique())
@@ -146,8 +147,77 @@ def pred_column_gen(df, column_ids, rules_path):
     print(f'Labels not included: {not_included}')
     return df, column_ids
 
-def load_filenames(repo_path):
-    filenames_path = f'{repo_path}/Assets/app_image_filenames.pickle'
-    with open(filenames_path, 'rb') as f:
+def load_filenames():
+    with open(gb.FILENAMES_PATH, 'rb') as f:
         filenames = pickle.load(f)
     return filenames
+
+
+def print_rules():
+    rules = pandas.read_csv(gb.RULES_PATH, sep=',')
+    print(rules.head())
+
+
+
+from tqdm import tqdm
+import imghdr
+
+
+def split_fn(f):
+    """Get ID of a image filename"""
+    if f.startswith('O'): # taken with Damian script
+        _id = int(f.split('.')[0].split('_')[1])
+    else: # Space datasets
+        _id = int(f.split('.')[0].split(' ')[0].split('-')[0])
+    return _id
+
+def get_row(df, i):
+    """Get labels row by id"""
+    return df.loc[df.id == i]
+
+
+def get_labels_filenames(df, column_ids, split_fn=split_fn):
+    """
+    Get labels from image filenames.
+    If filenames provided will use it otherwise will read files and return it
+    """
+    # Get filenames of images
+    img_folder = load_filenames()
+
+    labels = {col:[] for col in column_ids.keys()}
+    labels['id'] = [] # store image ids
+    err = []
+    img_filenames = [] # list of images to save
+    # Get labels from filename
+    for filepath in tqdm(img_folder, total=len(img_folder)):
+        # filepath = os.path.join(dataset_path, f)
+        f = filepath.name
+        if f.startswith('.'):
+            continue
+
+
+        # Get ID from image filename
+        try:
+            im_id = split_fn(f)
+        except Exception as e:
+            # print(f'Error getting ID of file: {f}')
+            err.append(f)
+            continue
+
+        # Get labels from dataframe
+        try:
+            for col in labels.keys():
+                label = int(get_row(df, im_id)[col])
+                labels[col].append(label)
+
+        except Exception as e:
+            # print(im_id)
+            err.append(f)
+            continue
+            # raise e
+
+        img_filenames.append(filepath)
+
+
+    print(f'Error with: {err}')
+    return labels, img_filenames
