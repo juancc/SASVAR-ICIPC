@@ -285,4 +285,27 @@ def showim(im, scale=0.5, window='Image'):
     cv2.imshow(window, im)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+
+def popular_samples(d_labels, column_ids, category, no=50):
+    """Get the labels by category of the no popular by amount of images """
+    ids = column_ids[category]
+    data_count = []
+    labels_out = []
+    for name, labels in d_labels.items():
+        labels_dataset = pandas.DataFrame(data=labels)
+
+        count = dict(labels_dataset[category].value_counts())
+        count = fix_count(count, ids)
+
+        data = list(count.values())
+        l = list(count.keys())
+        if len(l) > len(labels_out): labels_out = l
+        data_count.append(data)
     
+    data_count = np.array(data_count).sum(axis=0)
+    labels_sorted = [x for _, x in sorted(zip(data_count,labels_out), reverse=True )]
+    return labels_sorted[:no]
+
+
