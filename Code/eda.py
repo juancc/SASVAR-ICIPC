@@ -88,9 +88,9 @@ def bar_plot(labels, column_ids, category, bottom=None, label=None, target_class
     return np.array(data), bar_container, labels
 
 
-def stacket_bar_plot(d_labels, column_ids, category, title_size=15, target_classes=None, colors=None):
+def stacket_bar_plot(d_labels, column_ids, category, title_size=15, target_classes=None, colors=None, figsize=(16,8)):
     # plt.figure(figsize = (16,8))
-    fig, ax = plt.subplots(figsize = (16,8))
+    fig, ax = plt.subplots(figsize=figsize)
 
     bottom = None
     labels_plot = []
@@ -133,7 +133,7 @@ def dataset_source_plot(d_labels, colors):
     # return total
     return np.sum(data)
 
-def correlate_plot(labels, column_ids, column0, column1, show_legend=True):
+def correlate_plot(labels, column_ids, column0, column1, show_legend=True, figsize=(16,8)):
     """Bar plot of one label distribution vs other"""
     x_data = np.array(labels[column0])
     y_data = np.array(labels[column1])
@@ -144,7 +144,7 @@ def correlate_plot(labels, column_ids, column0, column1, show_legend=True):
 
     bottom = np.zeros(len(x_plot))
     # plt.figure(figsize = (16,8))
-    fig, ax = plt.subplots(figsize = (16,8))
+    fig, ax = plt.subplots(figsize = figsize)
     
     for i in y:
         sl_x = x_data[y_data==i]
@@ -309,3 +309,8 @@ def popular_samples(d_labels, column_ids, category, no=50):
     return labels_sorted[:no]
 
 
+
+def plot_distribution(labels, column_ids, category, no=100):
+    """Shorter function to plot dataset distribution by category"""
+    popular_y = popular_samples({'App':labels}, column_ids, category, no=no)
+    y_count = stacket_bar_plot({'App':labels}, column_ids, category, target_classes=popular_y, colors=None)
