@@ -13,7 +13,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import cv2
 import pandas
-import Code.globals as globals
+import Code.globals as gb
 
 
 def fix_count(count, ids, target_classes=None):
@@ -37,7 +37,7 @@ def fix_count(count, ids, target_classes=None):
 
 
 def plot_random_images(n=10, img_exts={'.jpg', '.jpeg', '.png', '.bmp', '.gif'}):
-    base_path = os.path.join(globals.REPO_PATH, 'Dataset')
+    base_path = os.path.join(gb.REPO_PATH, 'Dataset')
     # Collect all image paths
     image_paths = []
     for root, _, files in os.walk(base_path):
