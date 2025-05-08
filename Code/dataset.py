@@ -232,9 +232,10 @@ def get_labels_filenames(df, column_ids, split_fn=split_fn):
 
 
 
-def load_dataset(filepath, col='Y', train_pct=0.8, seed=1234):
+def load_dataset(df, col='Y', train_pct=0.8, seed=1234):
     """Read the numpy features file from path"""
-    with open(filepath,'rb') as f:
+
+    with open(gb.FEATURES_PATH,'rb') as f:
         data = np.load(f, allow_pickle=True)
     
     if seed is not None:
@@ -249,8 +250,8 @@ def load_dataset(filepath, col='Y', train_pct=0.8, seed=1234):
         im_name = row[1]
 
         try:
-            im_id = dataset.split_fn(im_name)
-            y = int(dataset.get_row(df, im_id)[col])
+            im_id = split_fn(im_name)
+            y = int(get_row(df, im_id)[col])
         except Exception as e:
             # print(f' - {e} Error in file name: {im_name}')
             err.append(im_name)
