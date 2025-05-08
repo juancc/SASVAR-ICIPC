@@ -12,7 +12,7 @@ REPO_PATH = Path(os.path.dirname(script_path))
 LABELS_PATH = os.path.join(REPO_PATH, 'Assets','SASVAR-labels.csv')
 FILENAMES_PATH = os.path.join(REPO_PATH, 'Assets','app_image_filenames.pickle')
 RULES_PATH = os.path.join(REPO_PATH, 'Assets','8class_v5.csv')
-
+FEATURES_PATH = os.path.join(REPO_PATH, 'Dataset','features.npy')
 
 
 NAN_TAG = 'Unknown'

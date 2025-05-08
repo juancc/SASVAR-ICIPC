@@ -5,9 +5,16 @@ JCA
 """
 import pickle
 import os
+import random
 
 import pandas
 import numpy as np
+
+
+from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.preprocessing import image
+import numpy as np
+
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -221,3 +228,58 @@ def get_labels_filenames(df, column_ids, split_fn=split_fn):
 
     print(f'Error with: {err}')
     return labels, img_filenames
+
+
+
+
+def load_dataset(filepath, col='Y', train_pct=0.8, seed=1234):
+    """Read the numpy features file from path"""
+    with open(filepath,'rb') as f:
+        data = np.load(f, allow_pickle=True)
+    
+    if seed is not None:
+        random.seed(seed)
+    random.shuffle(data)
+    
+    err = []
+    X = []
+    Y = []
+    for row in data:
+        x = row[0]
+        im_name = row[1]
+
+        try:
+            im_id = dataset.split_fn(im_name)
+            y = int(dataset.get_row(df, im_id)[col])
+        except Exception as e:
+            # print(f' - {e} Error in file name: {im_name}')
+            err.append(im_name)
+
+        X.append(x)
+        Y.append(y)
+    
+    print(f' Errors: {len(err)}')
+    
+
+
+    # Split train_test
+    split_idx = int(train_pct * len(X))
+
+    x_train = np.array(X[:split_idx])
+    y_train = np.array(Y[:split_idx])
+
+    x_test = np.array(X[split_idx:])
+    y_test = np.array(Y[split_idx:])
+
+    return (x_train, y_train), (x_test, y_test)
+
+
+
+
+def load_image(img_path, target_size=(224, 224), preprocess_input=preprocess_input):
+    """Read and preprocess image for ResNet50"""
+    img = image.load_img(img_path, target_size=target_size)  # ResNet50 expects 224x224
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)  # Add batch dimension
+    x = preprocess_input(x)  # Preprocess for ResNet50
+    return x
